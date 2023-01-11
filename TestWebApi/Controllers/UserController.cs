@@ -16,7 +16,6 @@ namespace TestWebApi.Controllers
             _userService = userService;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<UserDto>> GetUsers()
         {            

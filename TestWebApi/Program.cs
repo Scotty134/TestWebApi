@@ -9,6 +9,8 @@ using Service.Services;
 using System.Text;
 using TestWebApi.Extensions;
 using TestWebApi.Interfaces;
+using TestWebApi.Middleware;
+using TestWebApi.SeedData;
 using TestWebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +43,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200")) ;
 
