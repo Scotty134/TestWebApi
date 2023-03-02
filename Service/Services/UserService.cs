@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Infrastructure.Dtos;
 using Infrastructure.Mapping;
 using Persistence.Abstraction.Repositories;
@@ -25,18 +26,33 @@ namespace Service.Services
             _userRepository = userRepository;
         }
 
-        public UserDto GetUserById(int id)
+        public MemberDto GetUserById(int id)
         {
             var model = _userRepository.GetUserById(id);
-            var user = _mapper.Map<UserDto>(model);
+            var user = _mapper.Map<MemberDto>(model);
             return user;
         }
 
-        public IEnumerable<UserDto> GetUsers()
+        public MemberDto GetUserByName(string name)
+        {
+            var model = _userRepository.GetUserByName(name);
+            var user = _mapper.Map<MemberDto>(model);
+            return user;
+        }
+
+        public IEnumerable<MemberDto> GetUsers()
         {
             var models = _userRepository.GetUsers();
-            var users = _mapper.Map<IEnumerable<UserDto>>(models);
+            var users = _mapper.Map<IEnumerable<MemberDto>>(models);
             return users;
+        }
+
+        public MemberDto UpdateUser(string name, MemberUpdateDto user)
+        {
+            var model = _mapper.Map<User>(user);
+            model = _userRepository.UpdateUser(name, model);
+            var userModel = _mapper.Map<MemberDto>(model);
+            return userModel;
         }
     }
 }

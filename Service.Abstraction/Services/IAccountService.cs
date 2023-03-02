@@ -9,7 +9,7 @@ namespace Service.Abstraction.Services
 {
     public interface IAccountService
     {
-        public AccountDto Register(RegisterAccountDto account);
+        public AccountDto Register(LoginAccountDto account);
         public AccountDto Login(LoginAccountDto account);
     }
 }

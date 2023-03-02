@@ -22,7 +22,7 @@ namespace TestWebApi.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<UserTokenDto> Register(RegisterAccountDto account)
+        public ActionResult<UserTokenDto> Register(LoginAccountDto account)
         {
             var user = _accountService.Register(account);
 
@@ -51,7 +51,8 @@ namespace TestWebApi.Controllers
             return new UserTokenDto
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.PhotoUrl
             }; 
         }
     }

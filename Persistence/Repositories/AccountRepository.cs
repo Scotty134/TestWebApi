@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Abstraction.Repositories;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -17,7 +18,9 @@ namespace Persistence.Repositories
 
         public User Login(string userName, string password)
         {
-            var user = _context.Users.SingleOrDefault(u => u.UserName == userName);
+            var user = _context.Users
+                .Include(p => p.Photos)
+                .SingleOrDefault(u => u.UserName == userName);
             if (user == null)
             {
                 return null;

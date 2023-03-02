@@ -38,7 +38,7 @@ namespace Service.Services
             return user;
         }
 
-        public AccountDto Register(RegisterAccountDto account)
+        public AccountDto Register(LoginAccountDto account)
         {
             var model = _accountRepository.Register(account.Username, account.Password);
             var user = _mapper.Map<AccountDto>(model);

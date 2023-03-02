@@ -1,16 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Persistence;
-using Persistence.Abstraction.Repositories;
-using Persistence.Repositories;
-using Service.Abstraction.Services;
-using Service.Services;
 using System.Text;
 using TestWebApi.Extensions;
+using TestWebApi.Helpers;
 using TestWebApi.Interfaces;
 using TestWebApi.Middleware;
-using TestWebApi.SeedData;
 using TestWebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,10 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddDbContext<DataContext>(options =>
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("TestDatabase")));
 
+//From ApplicationServiceExtensions
 builder.Services.AddPersistenceDependencies();
 builder.Services.AddServiceDependencies();
 
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -40,10 +34,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors();
+//Cors moved to AddApplicationServices with CloudinarySettings
+builder.Services.AddApplicationServices(builder.Configuration);
+//builder.Services.AddCors();
 
 var app = builder.Build();
 
+//HTTP response interceptor
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200")) ;

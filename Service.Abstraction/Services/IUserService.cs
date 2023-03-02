@@ -4,8 +4,12 @@ namespace Service.Abstraction.Services
 {
     public  interface IUserService
     {
-        public UserDto GetUserById(int id);
+        public MemberDto GetUserById(int id);
 
-        public IEnumerable<UserDto> GetUsers();
+        public MemberDto GetUserByName(string name);
+
+        public IEnumerable<MemberDto> GetUsers();
+
+        public MemberDto UpdateUser(string name, MemberUpdateDto user);
     }
 }

@@ -10,12 +10,22 @@ namespace Infrastructure.Mapping
         {
             AllowNullCollections= true;
 
-            CreateMap<User, UserDto>().
-                ReverseMap()
-                ;
-            CreateMap<User, AccountDto>().
-                ReverseMap()
-                ;
+            CreateMap<User, UserDto>()
+                .ReverseMap();
+            
+            CreateMap<User, AccountDto>()
+                .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ReverseMap();
+
+            CreateMap<User, MemberDto>()
+                .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ReverseMap();
+
+            CreateMap<User, MemberUpdateDto>()
+                .ReverseMap();
+
+            CreateMap<Photo, PhotoDto>()
+                .ReverseMap();
         }
     }
 }

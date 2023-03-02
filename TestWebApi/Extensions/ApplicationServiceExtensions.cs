@@ -2,6 +2,9 @@
 using Persistence.Repositories;
 using Service.Abstraction.Services;
 using Service.Services;
+using TestWebApi.Helpers;
+using TestWebApi.Interfaces;
+using TestWebApi.Services;
 
 namespace TestWebApi.Extensions
 {
@@ -11,6 +14,7 @@ namespace TestWebApi.Extensions
         {
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPhotoService, PhotoService>();
 
             return services;
         }
@@ -19,6 +23,17 @@ namespace TestWebApi.Extensions
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRespository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddCors();
+            services.AddScoped<ITokenService, TokenService>();            
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddScoped<ICloudPhotoService, CloudPhotoService>();
 
             return services;
         }
