@@ -40,26 +40,31 @@ namespace Persistence.Repositories
             return user;
         }
 
-        public User Register(string userName, string password)
+        public User Register(User user, string password)
         {
-            if (_context.Users.Any(u => u.UserName.ToLower() == userName.ToLower()))
+            if (_context.Users.Any(u => u.UserName.ToLower() == user.UserName.ToLower()))
             {
                 return null;
             }
 
             using var hmac = new HMACSHA512();
 
-            var user = new User
+            var newUser = new User
             {
-                UserName = userName,
+                UserName = user.UserName,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                City= user.City,
+                DateOfBirth= user.DateOfBirth,
+                Country= user.Country,
+                Gender= user.Gender,
+                Name= user.Name
             };
 
-            _context.Users.Add(user);
+            _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            return user;
+            return newUser;
         }
 
     }

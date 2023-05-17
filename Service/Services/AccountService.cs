@@ -40,7 +40,8 @@ namespace Service.Services
 
         public AccountDto Register(LoginAccountDto account)
         {
-            var model = _accountRepository.Register(account.Username, account.Password);
+            var model = _mapper.Map<User>(account);
+            model = _accountRepository.Register(model, account.Password);
             var user = _mapper.Map<AccountDto>(model);
             return user;
         }

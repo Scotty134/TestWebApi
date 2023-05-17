@@ -21,6 +21,9 @@ namespace Infrastructure.Mapping
                 .ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ReverseMap();
 
+            CreateMap<User, LoginAccountDto>()
+                .ReverseMap();
+
             CreateMap<User, MemberUpdateDto>()
                 .ReverseMap();
 
