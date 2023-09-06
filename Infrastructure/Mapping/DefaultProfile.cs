@@ -24,6 +24,9 @@ namespace Infrastructure.Mapping
             CreateMap<User, LoginAccountDto>()
                 .ReverseMap();
 
+            CreateMap<User, RegisterAccountDto>()
+                .ReverseMap();
+
             CreateMap<User, MemberUpdateDto>()
                 .ReverseMap();
 

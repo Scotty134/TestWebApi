@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Dtos;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
@@ -18,11 +19,19 @@ namespace TestWebApi.Controllers
             _userService = userService;
         }
 
+        //[HttpGet]
+        //public ActionResult<IEnumerable<MemberDto>> GetUsers()
+        //{            
+        //    var users = _userService.GetUsers();
+        //    return users.ToList();
+        //}
+
         [HttpGet]
-        public ActionResult<IEnumerable<MemberDto>> GetUsers()
-        {            
-            var users = _userService.GetUsers();
-            return users.ToList();
+        public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
+        {
+            var result = await _userService.GetUsersAsync(userParams);
+            Response.AddPaginationHeader(new PaginationHeader(result.CurrentPage, result.PageSize, result.TotalCount, result.TotalPages));
+            return Ok(result);
         }
 
         [HttpGet("id/{id}")]

@@ -22,7 +22,7 @@ namespace TestWebApi.Controllers
         }
 
         [HttpPost("register")]
-        public ActionResult<UserTokenDto> Register(LoginAccountDto account)
+        public ActionResult<UserTokenDto> Register(RegisterAccountDto account)
         {
             var user = _accountService.Register(account);
 

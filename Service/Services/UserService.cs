@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Dtos;
+using Infrastructure.Helpers;
 using Infrastructure.Mapping;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using Persistence.Abstraction.Repositories;
-using Persistence.Repositories;
 using Service.Abstraction.Services;
 
 namespace Service.Services
@@ -12,6 +15,7 @@ namespace Service.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
         public UserService(IUserRepository userRepository) 
         {
@@ -21,6 +25,7 @@ namespace Service.Services
                 cfg.AddProfile<DefaultProfile>();
             });
             _mapper = new Mapper(config);
+            _context = new DataContext();
 
             //TODO: replace with DI
             _userRepository = userRepository;
@@ -45,6 +50,37 @@ namespace Service.Services
             var models = _userRepository.GetUsers();
             var users = _mapper.Map<IEnumerable<MemberDto>>(models);
             return users;
+        }
+
+        public async Task<PagedList<MemberDto>> GetUsersAsync(UserParams userParams)
+        {
+            //var query = _context.Users.AsQueryable();
+
+            //query = query.Where(u => u.UserName != userParams.CurrentUsername);
+            //query = query.Where(u => u.Gender == userParams.Gender);
+
+            //var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
+            //var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
+
+            //query = query.Where(u => u.DateOfBirth >= minDob.ToDateTime(new TimeOnly()) 
+            //            && u.DateOfBirth <= maxDob.ToDateTime(new TimeOnly()));
+
+            //query = userParams.OrderBy switch
+            //{
+            //    "created" => query.OrderByDescending(u => u.Created),
+            //    _ => query.OrderByDescending(u => u.LastActive)
+            //};
+
+            //return await PagedList<MemberDto>.CreateAsync(
+            //    query.AsNoTracking().ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+            //    userParams.PageNumber,
+            //    userParams.PageSize);
+            var query = _context.Users
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking();
+
+            return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+
         }
 
         public MemberDto UpdateUser(string name, MemberUpdateDto user)
