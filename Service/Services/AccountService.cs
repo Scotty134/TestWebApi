@@ -3,14 +3,7 @@ using Domain.Entities;
 using Infrastructure.Dtos;
 using Infrastructure.Mapping;
 using Persistence.Abstraction.Repositories;
-using Persistence.Repositories;
 using Service.Abstraction.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Services
 {

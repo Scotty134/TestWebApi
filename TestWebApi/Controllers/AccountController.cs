@@ -1,9 +1,6 @@
 ﻿using Infrastructure.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
-using System.Security.Cryptography;
-using System.Text;
 using TestWebApi.Interfaces;
 
 namespace TestWebApi.Controllers
@@ -34,7 +31,9 @@ namespace TestWebApi.Controllers
             return new UserTokenDto
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                Gender = user.Gender,
+                Name = user.Name
             };
         }
 
@@ -52,7 +51,9 @@ namespace TestWebApi.Controllers
             {
                 UserName = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.PhotoUrl
+                PhotoUrl = user.PhotoUrl,
+                Gender = user.Gender,
+                Name = user.Name
             }; 
         }
     }

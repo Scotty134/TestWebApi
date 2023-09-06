@@ -14,7 +14,6 @@
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
         public List<PhotoDto> Photos { get; set; }
-
         public int Age { get; set; }
     }
 }
