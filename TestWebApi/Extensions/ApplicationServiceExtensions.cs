@@ -34,6 +34,7 @@ namespace TestWebApi.Extensions
             services.AddScoped<ITokenService, TokenService>();            
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudPhotoService, CloudPhotoService>();
+            services.AddScoped<LogUserActivity>();
 
             return services;
         }

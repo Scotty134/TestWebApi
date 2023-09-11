@@ -1,13 +1,10 @@
 ﻿using Infrastructure.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BuggyController : ControllerBase
+    public class BuggyController : BaseController
     {
         public BuggyController()
         {

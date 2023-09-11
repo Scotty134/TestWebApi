@@ -1,18 +1,14 @@
 ﻿using Infrastructure.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
-using System.Xml.Linq;
 using TestWebApi.Extensions;
 using TestWebApi.Interfaces;
 
 namespace TestWebApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PhotoController : ControllerBase
+    public class PhotoController : BaseController
     {
         private ICloudPhotoService _cloudPhotoService;
         private IUserService _userService;

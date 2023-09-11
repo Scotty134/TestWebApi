@@ -3,15 +3,12 @@ using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
-using System.Security.Claims;
 using TestWebApi.Extensions;
 
 namespace TestWebApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private IUserService _userService;
         public UserController(IUserService userService)

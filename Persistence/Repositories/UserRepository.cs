@@ -34,10 +34,13 @@ namespace Persistence.Repositories
         public User UpdateUser(string name, User user)
         {
             var model = _context.Users.FirstOrDefault(u => u.UserName == name);
-            
-            model.Introduction = user.Introduction;
-            model.City= user.City;
-            model.Country= user.Country;
+            model.Gender = user.Gender;            
+            model.Introduction = user.Introduction;            
+            model.City = user.City;
+            model.DateOfBirth = model.DateOfBirth;
+            model.Name = name;
+            model.Country = user.Country;
+            model.LastActive = user.LastActive;
             _context.SaveChanges();
 
             return model;

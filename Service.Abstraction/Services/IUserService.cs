@@ -10,5 +10,6 @@ namespace Service.Abstraction.Services
         public IEnumerable<MemberDto> GetUsers();
         public Task<PagedList<MemberDto>> GetUsersAsync(UserParams userParams);
         public MemberDto UpdateUser(string name, MemberUpdateDto user);
+        public MemberDto UpdateUser(string name, MemberDto user);
     }
 }

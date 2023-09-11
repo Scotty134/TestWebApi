@@ -11,7 +11,6 @@ namespace Domain.Entities
     public class User
     {
         public int Id { get; set; }
-
         [Required]
         [RegularExpression("^[a-zA-Z]{3,28}$") ]
         public string UserName { get; set; }

@@ -72,10 +72,17 @@ namespace Service.Services
                 .AsNoTracking();
 
             return await PagedList<MemberDto>.CreateAsync(source, userParams.PageNumber, userParams.PageSize);
-
         }
 
         public MemberDto UpdateUser(string name, MemberUpdateDto user)
+        {
+            var model = _mapper.Map<User>(user);
+            model = _userRepository.UpdateUser(name, model);
+            var userModel = _mapper.Map<MemberDto>(model);
+            return userModel;
+        }
+
+        public MemberDto UpdateUser(string name, MemberDto user)
         {
             var model = _mapper.Map<User>(user);
             model = _userRepository.UpdateUser(name, model);
