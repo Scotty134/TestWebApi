@@ -7,7 +7,7 @@ namespace TestWebApi.Extensions
     {
         public static string GetUserName(this ClaimsPrincipal user)
         {
-            return user.FindFirst(ClaimTypes.Name)?.Value;
+            return user.FindFirst("name")?.Value;
         }
 
         public static string GetUserId(this ClaimsPrincipal user)
