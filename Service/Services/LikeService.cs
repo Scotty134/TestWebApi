@@ -1,0 +1,75 @@
+﻿using AutoMapper;
+using Infrastructure.Dtos;
+using Infrastructure.Mapping;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
+using Persistence.Abstraction.Repositories;
+using Service.Abstraction.Services;
+
+namespace Service.Services
+{
+    public class LikeService: ILikesService
+    {
+        private readonly ILikesRepository _likesRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        private readonly DataContext _context;
+
+        public LikeService(ILikesRepository likesRepository, IUserRepository userRepository)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AllowNullDestinationValues = true;
+                cfg.AddProfile<DefaultProfile>();
+            });
+            _mapper = new Mapper(config);
+            _context = new DataContext();
+            _likesRepository = likesRepository;
+            _userRepository = userRepository;
+        }
+
+        public async Task<IEnumerable<LikesDto>> GetUserLikes(string predicate, int userId)
+        {
+            var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
+            var likes = _context.Likes.AsQueryable();
+
+            if (predicate == "liked")
+            {
+                likes = likes.Where(like => like.SourceUserId == userId);
+                users = likes.Select(like => like.TargetUser);
+            }
+
+            if (predicate == "likedBy")
+            {
+                likes = likes.Where(like => like.TargetUserId == userId);
+                users = likes.Select(like => like.SourceUser);
+            }
+
+            var models = await users.Select(user => new LikesDto { 
+                User = user.UserName,
+                Name = user.Name,
+                Age = user.Age,
+                PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
+                City = user.City,
+                Id = user.Id
+            }).ToListAsync();
+            return models;
+        }
+
+        public async Task<bool> ToggleLike(int sourceUserId, int targetUserId)
+        {
+            var sourceUser = await _likesRepository.GetUserWithLikes(sourceUserId);
+            var targetUser = _userRepository.GetUserById(targetUserId);
+            if (targetUser == null) return false;
+            var userLike = await _likesRepository.GetUserLike(sourceUserId, targetUserId);
+            if(userLike != null)
+            {
+               return await _likesRepository.RemoveLike(sourceUserId, targetUserId);              
+            }
+            else
+            {
+                return await _likesRepository.AddLike(sourceUserId, targetUserId);
+            }           
+        }
+    }
+}

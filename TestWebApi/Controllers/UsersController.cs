@@ -8,10 +8,10 @@ using TestWebApi.Extensions;
 namespace TestWebApi.Controllers
 {
     [Authorize]
-    public class UserController : BaseController
+    public class UsersController : BaseController
     {
         private IUserService _userService;
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }

@@ -27,7 +27,6 @@ namespace Service.Services
             _mapper = new Mapper(config);
             _context = new DataContext();
 
-            //TODO: replace with DI
             _userRepository = userRepository;
         }
 

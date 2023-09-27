@@ -25,6 +25,8 @@ namespace Domain.Entities
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime LastActive { get; set; } = DateTime.UtcNow;
         public List<Photo> Photos { get; set; } = new();
+        public List<UserLike> LikedByUser { get; set; } = new();
+        public List<UserLike> LikedUsers { get; set; } = new();
 
         [NotMapped]
         public int Age
