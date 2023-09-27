@@ -10,9 +10,9 @@ namespace TestWebApi.Extensions
             return user.FindFirst("name")?.Value;
         }
 
-        public static string GetUserId(this ClaimsPrincipal user)
+        public static int GetUserId(this ClaimsPrincipal user)
         {
-            return user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         }
     }
 }

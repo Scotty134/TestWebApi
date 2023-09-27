@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Dtos;
+using Infrastructure.Helpers;
 using Infrastructure.Mapping;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Abstraction.Repositories;
 using Service.Abstraction.Services;
@@ -28,32 +28,32 @@ namespace Service.Services
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<LikesDto>> GetUserLikes(string predicate, int userId)
+        public async Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams)
         {
             var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
             var likes = _context.Likes.AsQueryable();
 
-            if (predicate == "liked")
+            if (likesParams.Predicate == "liked")
             {
-                likes = likes.Where(like => like.SourceUserId == userId);
+                likes = likes.Where(like => like.SourceUserId == likesParams.UserId);
                 users = likes.Select(like => like.TargetUser);
             }
 
-            if (predicate == "likedBy")
+            if (likesParams.Predicate == "likedBy")
             {
-                likes = likes.Where(like => like.TargetUserId == userId);
+                likes = likes.Where(like => like.TargetUserId == likesParams.UserId);
                 users = likes.Select(like => like.SourceUser);
             }
 
-            var models = await users.Select(user => new LikesDto { 
+            var models = users.Select(user => new LikeDto { 
                 User = user.UserName,
                 Name = user.Name,
                 Age = user.Age,
                 PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
                 City = user.City,
                 Id = user.Id
-            }).ToListAsync();
-            return models;
+            });
+            return await PagedList<LikeDto>.CreateAsync(models, likesParams.PageNumber, likesParams.PageSize);
         }
 
         public async Task<bool> ToggleLike(int sourceUserId, int targetUserId)

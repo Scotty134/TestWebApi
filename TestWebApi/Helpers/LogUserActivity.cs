@@ -12,7 +12,7 @@ namespace TestWebApi.Helpers
 
             if (!resultContext.HttpContext.User.Identity!.IsAuthenticated) return;
 
-            var userId = int.Parse(resultContext.HttpContext.User.GetUserId());
+            var userId = resultContext.HttpContext.User.GetUserId();
 
             var userService = resultContext.HttpContext.RequestServices.GetRequiredService<IUserService>();
             var user = userService.GetUserById(userId);

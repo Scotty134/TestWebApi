@@ -16,6 +16,7 @@ namespace TestWebApi.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<ILikesService, LikeService>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             return services;
         }
@@ -26,6 +27,7 @@ namespace TestWebApi.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhotoRepository, PhotoRespository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
+            services.AddScoped<IMessageService, MessageService>();
 
             return services;
         }

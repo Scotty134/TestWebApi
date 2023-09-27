@@ -8,10 +8,11 @@ namespace Persistence
         public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<UserLike> Likes { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-            dbContextOptionsBuilder.UseSqlServer("Server=LINCW10DP2584\\MSSQLSERVER01;Database=MyTestDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+            dbContextOptionsBuilder.UseSqlServer("Server=DESKTOP-0D43FCJ\\SQLEXPRESS;Database=MyTestDb;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
         //public DataContext(DbContextOptions options) : base(options)
@@ -35,6 +36,17 @@ namespace Persistence
                 .WithMany(l => l.LikedByUser)
                 .HasForeignKey(s => s.TargetUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(s => s.Sender)
+                .WithMany(m => m.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

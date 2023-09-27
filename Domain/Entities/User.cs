@@ -27,6 +27,8 @@ namespace Domain.Entities
         public List<Photo> Photos { get; set; } = new();
         public List<UserLike> LikedByUser { get; set; } = new();
         public List<UserLike> LikedUsers { get; set; } = new();
+        public List<Message> MessagesSent { get; set; } = new();
+        public List<Message> MessagesReceived { get; set; } = new();
 
         [NotMapped]
         public int Age

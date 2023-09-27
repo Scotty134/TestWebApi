@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Dtos;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
@@ -21,7 +22,7 @@ namespace TestWebApi.Controllers
         [HttpPost("{username}")]
         public async Task<ActionResult> ToggleLike(string username)
         {
-            var sourceUserId = int.Parse(User.GetUserId());
+            var sourceUserId = User.GetUserId();
             var sourceUserName = User.GetUserName();
             var targetUser = _userService.GetUserByName(username);
 
@@ -32,9 +33,11 @@ namespace TestWebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LikesDto>>> GetUserLikes(string predicate)
+        public async Task<ActionResult<IEnumerable<LikeDto>>> GetUserLikes([FromQuery] LikesParams likeParams)
         {
-            var users = await _likesService.GetUserLikes(predicate, int.Parse(User.GetUserId()));
+            likeParams.UserId = User.GetUserId();
+            var users = await _likesService.GetUserLikes(likeParams);
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
             return Ok(users);
         }
     }
