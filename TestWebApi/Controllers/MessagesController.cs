@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Dtos;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Abstraction.Services;
@@ -29,6 +30,25 @@ namespace TestWebApi.Controllers
             var message = _messageService.AddMessage(user, createMessage);
 
             return Ok(message);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PagedList<MessageDto>>> GetMessagesForUser([FromQuery] MessageParams messageParams)
+        {
+            messageParams.Username = User.GetUserName();
+
+            var messages = await _messageService.GetMessagesForUser(messageParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(messages.CurrentPage, messages.PageSize, messages.TotalCount, messages.TotalPages));
+            return messages;
+        }
+
+        [HttpGet("thread/{username}")]
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessageThread(string username)
+        {
+            var currentUsername = User.GetUserName();
+            var messages = await _messageService.GetMessageThread(currentUsername, username);
+            return Ok(messages);
         }
     }
 }

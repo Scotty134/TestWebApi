@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain.Entities;
 using Infrastructure.Dtos;
 using Infrastructure.Helpers;
 using Infrastructure.Mapping;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using Persistence.Abstraction.Repositories;
 using Service.Abstraction.Services;
 
@@ -13,6 +16,7 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IMessageRepository _messageRepository;
+        private readonly DataContext _context;
 
         public MessageService(IMessageRepository messageRepository, IUserRepository userRepository)
         {
@@ -22,6 +26,7 @@ namespace Service.Services
                 cfg.AddProfile<DefaultProfile>();
             });
             _mapper = new Mapper(config);
+            _context = new DataContext();
             _messageRepository = messageRepository;
             _userRepository = userRepository;
         }
@@ -47,9 +52,44 @@ namespace Service.Services
             return dto;
         }
 
-        public Task<PagedList<MessageDto>> GetMessagesForUser()
+        public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
         {
-            throw new NotImplementedException();
+            var query = _context.Messages
+                .OrderByDescending(m => m.MessageSent)
+                .AsQueryable();
+
+            query = messageParams.Container switch
+            {
+                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username),
+                _ => query.Where(u => u.RecipientUsername == messageParams.Username && u.DateRead == null)
+            };
+
+            var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);//_mapper.Map<IQueryable<MessageDto>>(query);
+            return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
+        }
+
+        public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientName)
+        {
+            var messages = await _context.Messages
+                .Include(m => m.Sender).ThenInclude(u => u.Photos)
+                .Include(m => m.Recipient).ThenInclude(u => u.Photos)
+                .Where(
+                    m => m.RecipientUsername == currentUserName && m.SenderUsername == recipientName || m.RecipientUsername == recipientName && m.SenderUsername == currentUserName
+                )
+                .OrderBy(m => m.MessageSent)
+                .ToListAsync();
+            var unreadMessages = messages.Where(m => m.DateRead == null && m.RecipientUsername == currentUserName).ToList();
+
+            if (unreadMessages.Any())
+            {
+                foreach (var message in unreadMessages)
+                {
+                    message.DateRead = DateTime.UtcNow;
+                }
+                await _context.SaveChangesAsync();
+            }
+            return _mapper.Map<IEnumerable<MessageDto>>(messages);
         }
     }
 }
