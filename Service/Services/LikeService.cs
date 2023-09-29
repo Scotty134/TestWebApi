@@ -46,7 +46,7 @@ namespace Service.Services
             }
 
             var models = users.Select(user => new LikeDto { 
-                User = user.UserName,
+                UserName = user.UserName,
                 Name = user.Name,
                 Age = user.Age,
                 PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
