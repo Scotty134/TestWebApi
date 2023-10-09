@@ -19,12 +19,6 @@ namespace Persistence.Repositories
             _context.SaveChanges();
         }
 
-        public void DeleteMessage(Message message)
-        {
-            _context.Messages.Remove(message);
-            _context.SaveChanges();
-        }
-
         public async Task<Message> GetMessage(int id)
         {
             return await _context.Messages.FindAsync(id);

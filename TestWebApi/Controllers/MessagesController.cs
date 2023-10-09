@@ -50,5 +50,19 @@ namespace TestWebApi.Controllers
             var messages = await _messageService.GetMessageThread(currentUsername, username);
             return Ok(messages);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            var username = User.GetUserName();
+            var message = await _messageService.GetMessage(id);
+
+            if (message.SenderUsername != username && message.RecipientUsername != username) return Unauthorized();
+
+            if (message.SenderUsername == username) message.SenderDeleted = true;
+            if (message.RecipientUsername == username) message.RecipientDeleted = true;
+            
+            return (_messageService.DeleteMessage(message)) ? Ok() : BadRequest("Problem deleting the message.");
+        }
     }
 }

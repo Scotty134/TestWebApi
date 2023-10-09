@@ -52,6 +52,32 @@ namespace Service.Services
             return dto;
         }
 
+        public bool DeleteMessage(MessageDto message)
+        {
+            var model = _context.Messages.FirstOrDefault(m => m.Id == message.Id);
+            if (model == null) return false;
+
+            if (message.SenderDeleted && message.RecipientDeleted)
+            {
+                _context.Messages.Remove(model);
+            }
+            else
+            {
+                model.SenderDeleted = message.SenderDeleted;
+                model.RecipientDeleted = message.RecipientDeleted;
+                _context.Messages.Update(model);
+            }
+            if (_context.SaveChanges() > 0) return true;
+            return false;
+        }
+
+        public async Task<MessageDto> GetMessage(int id)
+        {
+            var message = await _messageRepository.GetMessage(id);
+            var dto = _mapper.Map<MessageDto>(message);
+            return dto;
+        }
+
         public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
         {
             var query = _context.Messages
@@ -60,9 +86,9 @@ namespace Service.Services
 
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username),
-                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username),
-                _ => query.Where(u => u.RecipientUsername == messageParams.Username && u.DateRead == null)
+                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username && !u.RecipientDeleted),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username && !u.SenderDeleted),
+                _ => query.Where(u => u.RecipientUsername == messageParams.Username && !u.RecipientDeleted && u.DateRead == null)
             };
 
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);//_mapper.Map<IQueryable<MessageDto>>(query);
@@ -75,7 +101,12 @@ namespace Service.Services
                 .Include(m => m.Sender).ThenInclude(u => u.Photos)
                 .Include(m => m.Recipient).ThenInclude(u => u.Photos)
                 .Where(
-                    m => m.RecipientUsername == currentUserName && m.SenderUsername == recipientName || m.RecipientUsername == recipientName && m.SenderUsername == currentUserName
+                    m => m.RecipientUsername == currentUserName && 
+                    !m.RecipientDeleted &&
+                    m.SenderUsername == recipientName || 
+                    m.RecipientUsername == recipientName && 
+                    !m.SenderDeleted &&
+                    m.SenderUsername == currentUserName
                 )
                 .OrderBy(m => m.MessageSent)
                 .ToListAsync();
