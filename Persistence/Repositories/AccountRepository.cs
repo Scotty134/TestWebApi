@@ -26,17 +26,6 @@ namespace Persistence.Repositories
                 return null;
             }
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-            //Check password
-            foreach (var item in computedHash.Select((value, index) => (value, index)))
-            {
-                if (item.value != user.PasswordHash[item.index])
-                {
-                    return null;
-                }
-            }
             return user;
         }
 
@@ -47,13 +36,9 @@ namespace Persistence.Repositories
                 return null;
             }
 
-            using var hmac = new HMACSHA512();
-
             var newUser = new User
             {
-                UserName = user.UserName,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
-                PasswordSalt = hmac.Key,
+                UserName = user.UserName,                
                 City= user.City,
                 DateOfBirth= user.DateOfBirth,
                 Country= user.Country,

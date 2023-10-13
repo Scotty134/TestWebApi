@@ -1,14 +1,17 @@
-﻿using Infrastructure.Dtos;
+﻿using Domain.Entities;
+using Infrastructure.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApi.Controllers
 {
     public class BuggyController : BaseController
     {
-        public BuggyController()
+        private readonly UserManager<User> _userManager;
+        public BuggyController(UserManager<User> userManager)
         {
-
+            _userManager = userManager;
         }
 
         [Authorize]
@@ -40,11 +43,11 @@ namespace TestWebApi.Controllers
             return BadRequest("Bad request message");
         }
 
-        //[HttpPost("seed-data")]
-        //public ActionResult<string> PostSeedData()
-        //{
-        //    SeedData.SeedData.SeedUsers();
-        //    return Ok("Done");
-        //}
+        [HttpPost("seed-data")]
+        public ActionResult<string> PostSeedData()
+        {
+            SeedData.SeedData.SeedUsers(_userManager);
+            return Ok("Done");
+        }
     }
 }

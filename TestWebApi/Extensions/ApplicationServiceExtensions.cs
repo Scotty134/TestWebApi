@@ -12,22 +12,22 @@ namespace TestWebApi.Extensions
     {
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPhotoService, PhotoService>();
-            services.AddScoped<ILikesService, LikeService>();
-            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IPhotoService, PhotoService>();
+            services.AddSingleton<ILikesService, LikeService>();
+            services.AddSingleton<IMessageRepository, MessageRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddPersistenceDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPhotoRepository, PhotoRespository>();
-            services.AddScoped<ILikesRepository, LikesRepository>();
-            services.AddScoped<IMessageService, MessageService>();
+            services.AddSingleton<IAccountRepository, AccountRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IPhotoRepository, PhotoRespository>();
+            services.AddSingleton<ILikesRepository, LikesRepository>();
+            services.AddSingleton<IMessageService, MessageService>();
 
             return services;
         }
