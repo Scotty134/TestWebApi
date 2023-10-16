@@ -9,7 +9,7 @@ namespace Persistence.Abstraction.Repositories
 {
     public interface IAccountRepository
     {
-        public User Register(User user, string password);
-        public User Login(string userName, string password);
+        public AppUser Register(AppUser user, string password);
+        public AppUser Login(string userName, string password);
     }
 }

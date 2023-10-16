@@ -5,35 +5,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class DataContext : IdentityDbContext<User, Role, int, 
-        IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, 
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int, 
+        IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, 
         IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public DbSet<Photo> Photos { get; set; }
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
-        {
-            dbContextOptionsBuilder.UseSqlServer("Server=DESKTOP-0D43FCJ\\SQLEXPRESS;Database=MyTestDb;Trusted_Connection=True;MultipleActiveResultSets=true");
-        }
-
-        //public DataContext(DbContextOptions options) : base(options)
+        //protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         //{
+        //    dbContextOptionsBuilder.UseSqlServer("Server=DESKTOP-0D43FCJ\\MSSQLSERVER01;Database=MyTestDb;Trusted_Connection=True;MultipleActiveResultSets=true");
         //}
+
+        public DataContext(DbContextOptions options) : base(options)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>()
+            builder.Entity<AppUser>()
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
 
-            builder.Entity<Role>()
-                .HasMany(ur => ur.Roles)
+            builder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();

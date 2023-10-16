@@ -8,8 +8,8 @@ namespace TestWebApi.Controllers
 {
     public class BuggyController : BaseController
     {
-        private readonly UserManager<User> _userManager;
-        public BuggyController(UserManager<User> userManager)
+        private readonly UserManager<AppUser> _userManager;
+        public BuggyController(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
         }

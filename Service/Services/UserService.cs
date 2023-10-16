@@ -17,7 +17,7 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(DataContext context, IUserRepository userRepository)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -25,7 +25,7 @@ namespace Service.Services
                 cfg.AddProfile<DefaultProfile>();
             });
             _mapper = new Mapper(config);
-            _context = new DataContext();
+            _context = context;
 
             _userRepository = userRepository;
         }
@@ -75,7 +75,7 @@ namespace Service.Services
 
         public MemberDto UpdateUser(string name, MemberUpdateDto user)
         {
-            var model = _mapper.Map<User>(user);
+            var model = _mapper.Map<AppUser>(user);
             model = _userRepository.UpdateUser(name, model);
             var userModel = _mapper.Map<MemberDto>(model);
             return userModel;
@@ -83,7 +83,7 @@ namespace Service.Services
 
         public MemberDto UpdateUser(string name, MemberDto user)
         {
-            var model = _mapper.Map<User>(user);
+            var model = _mapper.Map<AppUser>(user);
             model = _userRepository.UpdateUser(name, model);
             var userModel = _mapper.Map<MemberDto>(model);
             return userModel;

@@ -11,12 +11,12 @@ namespace Persistence.Repositories
     {
         private readonly DataContext _context;
 
-        public AccountRepository()
+        public AccountRepository(DataContext context)
         {
-            _context= new DataContext();
+            _context= context;
         }
 
-        public User Login(string userName, string password)
+        public AppUser Login(string userName, string password)
         {
             var user = _context.Users
                 .Include(p => p.Photos)
@@ -29,21 +29,21 @@ namespace Persistence.Repositories
             return user;
         }
 
-        public User Register(User user, string password)
+        public AppUser Register(AppUser user, string password)
         {
             if (_context.Users.Any(u => u.UserName.ToLower() == user.UserName.ToLower()))
             {
                 return null;
             }
 
-            var newUser = new User
+            var newUser = new AppUser
             {
                 UserName = user.UserName,                
                 City= user.City,
                 DateOfBirth= user.DateOfBirth,
                 Country= user.Country,
                 Gender= user.Gender,
-                Name= user.Name
+                KnownAs = user.KnownAs
             };
 
             _context.Users.Add(newUser);

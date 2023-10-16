@@ -13,9 +13,9 @@ namespace Persistence.Repositories
     {
         private readonly DataContext _context;
 
-        public PhotoRespository()
+        public PhotoRespository(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
         public Photo Add(Photo photo, int userId)

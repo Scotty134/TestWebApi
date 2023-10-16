@@ -31,7 +31,7 @@ namespace TestWebApi.Controllers
                 UserName = user.UserName,
                 Token = _tokenService.CreateToken(user),
                 Gender = user.Gender,
-                Name = user.Name
+                KnownAs = user.KnownAs
             };
         }
 
@@ -51,7 +51,7 @@ namespace TestWebApi.Controllers
                 Token = _tokenService.CreateToken(user),
                 PhotoUrl = user.PhotoUrl,
                 Gender = user.Gender,
-                Name = user.Name
+                KnownAs = user.KnownAs
             }; 
         }
     }

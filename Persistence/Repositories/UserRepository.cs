@@ -7,38 +7,38 @@ namespace Persistence.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
-        public UserRepository()
+        public UserRepository(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<AppUser> GetUsers()
         {
             return _context.Users
                 .Include(p => p.Photos)
                 .ToList();
         }
 
-        public User GetUserById(int id)
+        public AppUser GetUserById(int id)
         {
             return _context.Users.Find(id);
         }
 
-        public User GetUserByName(string name)
+        public AppUser GetUserByName(string name)
         {
             return _context.Users
                 .Include(p => p.Photos)
                 .SingleOrDefault(u => u.UserName == name);
         }
 
-        public User UpdateUser(string name, User user)
+        public AppUser UpdateUser(string name, AppUser user)
         {
             var model = _context.Users.FirstOrDefault(u => u.UserName == name);
             model.Gender = user.Gender;            
             model.Introduction = user.Introduction;            
             model.City = user.City;
             model.DateOfBirth = model.DateOfBirth;
-            model.Name = name;
+            model.KnownAs = name;
             model.Country = user.Country;
             model.LastActive = user.LastActive;
             _context.SaveChanges();

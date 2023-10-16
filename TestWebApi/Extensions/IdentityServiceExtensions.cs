@@ -11,13 +11,13 @@ namespace TestWebApi.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddIdentityCore<User>(opt =>
+            services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
-                opt.User.RequireUniqueEmail = true;
+                opt.User.RequireUniqueEmail = false;
             })
-                .AddRoles<Role>()
-                .AddRoleManager<RoleManager<Role>>()
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

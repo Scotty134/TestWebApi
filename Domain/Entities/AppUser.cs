@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class User: IdentityUser<int>
+    public class AppUser: IdentityUser<int>
     {
-        public string? Name { get; set; }
-        public string? Gender { get; set; }
+        public string KnownAs { get; set; }
+        public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? City { get; set; }
         public string? Country { get; set; }        
@@ -19,7 +18,7 @@ namespace Domain.Entities
         public List<UserLike> LikedUsers { get; set; } = new();
         public List<Message> MessagesSent { get; set; } = new();
         public List<Message> MessagesReceived { get; set; } = new();
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<AppUserRole> UserRoles { get; set; }
 
         [NotMapped]
         public int Age

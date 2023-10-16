@@ -12,7 +12,7 @@ namespace Infrastructure.Dtos
         public string Password { get; set; }
         [Required]
         [MinLength(3)]
-        public string Name { get; set; }
+        public string KnownAs { get; set; }
         [Required]
         public string City { get; set; }
         [Required]

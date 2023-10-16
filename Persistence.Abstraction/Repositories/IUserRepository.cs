@@ -4,9 +4,9 @@ namespace Persistence.Abstraction.Repositories
 {
     public interface IUserRepository
     {
-        public IEnumerable<User> GetUsers();
-        public User GetUserById(int id);
-        public User GetUserByName(string name);
-        public User UpdateUser(string name, User user);
+        public IEnumerable<AppUser> GetUsers();
+        public AppUser GetUserById(int id);
+        public AppUser GetUserByName(string name);
+        public AppUser UpdateUser(string name, AppUser user);
     }
 }

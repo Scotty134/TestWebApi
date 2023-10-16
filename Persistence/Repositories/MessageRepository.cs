@@ -8,9 +8,9 @@ namespace Persistence.Repositories
     {
         private readonly DataContext _context;
 
-        public MessageRepository()
+        public MessageRepository(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
         public void AddMessage(Message message)

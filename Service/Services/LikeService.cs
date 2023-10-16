@@ -15,7 +15,7 @@ namespace Service.Services
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
-        public LikeService(ILikesRepository likesRepository, IUserRepository userRepository)
+        public LikeService(DataContext context, ILikesRepository likesRepository, IUserRepository userRepository)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -23,7 +23,7 @@ namespace Service.Services
                 cfg.AddProfile<DefaultProfile>();
             });
             _mapper = new Mapper(config);
-            _context = new DataContext();
+            _context = context;
             _likesRepository = likesRepository;
             _userRepository = userRepository;
         }
@@ -47,7 +47,7 @@ namespace Service.Services
 
             var models = users.Select(user => new LikeDto { 
                 UserName = user.UserName,
-                Name = user.Name,
+                KnownAs = user.KnownAs,
                 Age = user.Age,
                 PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
                 City = user.City,

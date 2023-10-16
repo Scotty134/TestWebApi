@@ -1,4 +1,6 @@
-﻿using Persistence.Abstraction.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistence;
+using Persistence.Abstraction.Repositories;
 using Persistence.Repositories;
 using Service.Abstraction.Services;
 using Service.Services;
@@ -12,22 +14,22 @@ namespace TestWebApi.Extensions
     {
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IPhotoService, PhotoService>();
-            services.AddSingleton<ILikesService, LikeService>();
-            services.AddSingleton<IMessageRepository, MessageRepository>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<ILikesService, LikeService>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddPersistenceDependencies(this IServiceCollection services)
-        {
-            services.AddSingleton<IAccountRepository, AccountRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<IPhotoRepository, PhotoRespository>();
-            services.AddSingleton<ILikesRepository, LikesRepository>();
-            services.AddSingleton<IMessageService, MessageService>();
+        {            
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRespository>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
+            services.AddScoped<IMessageService, MessageService>();
 
             return services;
         }

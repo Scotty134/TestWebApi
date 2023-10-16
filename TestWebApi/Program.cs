@@ -1,11 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using TestWebApi.Extensions;
 using TestWebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Services.AddDbContext<DataContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("TestDatabase")));
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TestDatabase")));
 
 //From ApplicationServiceExtensions
 builder.Services.AddPersistenceDependencies();

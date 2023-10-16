@@ -18,7 +18,7 @@ namespace Service.Services
         private readonly IMessageRepository _messageRepository;
         private readonly DataContext _context;
 
-        public MessageService(IMessageRepository messageRepository, IUserRepository userRepository)
+        public MessageService(DataContext context, IMessageRepository messageRepository, IUserRepository userRepository)
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -26,7 +26,7 @@ namespace Service.Services
                 cfg.AddProfile<DefaultProfile>();
             });
             _mapper = new Mapper(config);
-            _context = new DataContext();
+            _context = context;
             _messageRepository = messageRepository;
             _userRepository = userRepository;
         }

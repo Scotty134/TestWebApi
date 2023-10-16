@@ -1,27 +1,33 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 using System.Text.Json;
 
 namespace TestWebApi.SeedData
 {
     public class SeedData
     {
-        public static async void SeedUsers(UserManager<User> userManager)
+        public static async void SeedUsers(UserManager<AppUser> userManager)
         {
-            if (await userManager.Users.AnyAsync()) return;
+            //if (await userManager.Users.AnyAsync()) return;
 
             var userData = File.ReadAllText("SeedData/data.json");
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var users = JsonSerializer.Deserialize<List<User>>(userData);
+            var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
 
-            foreach (var user in users)
+            try
             {
-                user.UserName = user.UserName.ToLower();                
-                user.Photos.FirstOrDefault().PublicId = "-";
-                await userManager.CreateAsync(user, "password");
+                foreach (var user in users)
+                {
+                    user.UserName = user.UserName.ToLower();
+                    user.Photos.FirstOrDefault().PublicId = "-";
+                    var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            
         }
     }
 }

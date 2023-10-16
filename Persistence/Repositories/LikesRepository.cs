@@ -8,9 +8,9 @@ namespace Persistence.Repositories
     {
         private readonly DataContext _context;
 
-        public LikesRepository()
+        public LikesRepository(DataContext context)
         {
-            _context = new DataContext();
+            _context = context;
         }
 
         public async Task<bool> AddLike(int sourceUserId, int targetUserId)
@@ -30,7 +30,7 @@ namespace Persistence.Repositories
             return await _context.Likes.FindAsync(sourceUserId, targetUserId);
         }
 
-        public async Task<User> GetUserWithLikes(int userId)
+        public async Task<AppUser> GetUserWithLikes(int userId)
         {
             return await _context.Users
                 .Include(u => u.LikedUsers)
