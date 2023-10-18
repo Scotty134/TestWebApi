@@ -36,7 +36,7 @@ namespace TestWebApiIdentity.Data
             var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
             var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
 
-            query = query.Where(u => DateOnly.FromDateTime(u.DateOfBirth) >= minDob && DateOnly.FromDateTime(u.DateOfBirth) <= maxDob);
+            query = query.Where(u => u.DateOfBirth >= minDob.ToDateTime(new TimeOnly()) && u.DateOfBirth <= maxDob.ToDateTime(new TimeOnly()));
 
             query = userParams.OrderBy switch
             {
