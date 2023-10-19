@@ -4,6 +4,7 @@ using TestWebApiIdentity.Data;
 using TestWebApiIdentity.Entities;
 using TestWebApiIdentity.Extensions;
 using TestWebApiIdentity.Middleware;
+using TestWebApiIdentity.SignalR;
 
 namespace TestWebApiIdentity
 {
@@ -27,7 +28,10 @@ namespace TestWebApiIdentity
             // Configure the HTTP request pipeline.
             app.UseMiddleware<ExceptionMiddleware>();
 
-            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
+            app.UseCors(builder => builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
                 .WithOrigins("https://localhost:4200", "http://localhost:4200"));
 
             // Configure the HTTP request pipeline.
@@ -42,6 +46,7 @@ namespace TestWebApiIdentity
             app.UseAuthorization();
 
             app.MapControllers();
+            app.MapHub<PrecenseHub>("hubs/precense");
 
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
