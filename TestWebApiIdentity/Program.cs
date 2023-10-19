@@ -50,7 +50,7 @@ namespace TestWebApiIdentity
                 var context = services.GetRequiredService<DataContext>();
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
-                Seed.SeedUsers(userManager, roleManager);
+                //Seed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)
             {
