@@ -27,6 +27,7 @@ namespace TestWebApiIdentity.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Member")]
         public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
             var currentUser = await _userRepository.GetUserByUsernameAsync(User.GetUsername());

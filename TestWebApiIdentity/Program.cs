@@ -47,9 +47,10 @@ namespace TestWebApiIdentity
             var services = scope.ServiceProvider;
             try
             {
-                //var context = services.GetRequiredService<DataContext>();
-                //var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                //Seed.SeedUsers(userManager);
+                var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                Seed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)
             {
