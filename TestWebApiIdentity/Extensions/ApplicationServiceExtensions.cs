@@ -3,6 +3,7 @@ using TestWebApiIdentity.Interfaces;
 using TestWebApiIdentity.Services;
 using Microsoft.EntityFrameworkCore;
 using TestWebApiIdentity.Data;
+using TestWebApiIdentity.SignalR;
 
 namespace TestWebApiIdentity.Extensions
 {
@@ -25,6 +26,7 @@ namespace TestWebApiIdentity.Extensions
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddSignalR();
+            services.AddSingleton<PresenceTracket>();
 
             return services;
         }

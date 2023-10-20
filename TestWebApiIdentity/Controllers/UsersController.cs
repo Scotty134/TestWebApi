@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using TestWebApiIdentity.Data;
 using TestWebApiIdentity.DTOs;
 using TestWebApiIdentity.Entities;
 using TestWebApiIdentity.Extensions;
@@ -8,7 +6,6 @@ using TestWebApiIdentity.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace TestWebApiIdentity.Controllers
 {

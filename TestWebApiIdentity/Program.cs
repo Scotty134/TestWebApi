@@ -32,7 +32,7 @@ namespace TestWebApiIdentity
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("https://localhost:4200", "http://localhost:4200"));
+                .WithOrigins("http://localhost:4200"));
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,7 +46,7 @@ namespace TestWebApiIdentity
             app.UseAuthorization();
 
             app.MapControllers();
-            app.MapHub<PrecenseHub>("hubs/precense");
+            app.MapHub<PrecenseHub>("hubs/presence");
 
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
