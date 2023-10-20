@@ -47,6 +47,7 @@ namespace TestWebApiIdentity
 
             app.MapControllers();
             app.MapHub<PrecenseHub>("hubs/presence");
+            app.MapHub<MessageHub>("hubs/message");
 
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
