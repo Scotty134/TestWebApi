@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Validations;
+using Microsoft.EntityFrameworkCore;
 using TestWebApiIdentity.Data;
 using TestWebApiIdentity.Entities;
 using TestWebApiIdentity.Extensions;
@@ -46,7 +46,7 @@ namespace TestWebApiIdentity
             app.UseAuthorization();
 
             app.MapControllers();
-            app.MapHub<PrecenseHub>("hubs/presence");
+            app.MapHub<PresenceHub>("hubs/presence");
             app.MapHub<MessageHub>("hubs/message");
 
             using var scope = app.Services.CreateScope();
@@ -56,6 +56,8 @@ namespace TestWebApiIdentity
                 var context = services.GetRequiredService<DataContext>();
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                context.Database.Migrate();
+                context.Database.ExecuteSqlRaw("TRUNCATE TABLE [Connections]");
                 //Seed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)

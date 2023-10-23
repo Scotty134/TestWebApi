@@ -17,5 +17,6 @@ namespace TestWebApiIdentity.Interfaces
         void RemoveConnection(Connection connection);
         Task<Connection> GetConnection(string connectionId);
         Task<Group> GetMessagGroup(string groupName);
+        Task<Group> GetGroupForConnection(string connectionId);
     }
 }
